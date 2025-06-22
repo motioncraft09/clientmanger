@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClientSync | Client Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --success: #06d6a0;
+            --warning: #ffd166;
+            --danger: #ef476f;
+            --dark: #1e1e2c;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border: #dee2e6;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --sidebar-width: 260px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 25px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 25px;
+        }
+
+        .logo i {
+            font-size: 28px;
+            margin-right: 12px;
+        }
+
+        .logo h1 {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            flex: 1;
+        }
+
+        .nav-item {
+            padding: 14px 25px;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--warning);
+        }
+
+        .nav-item i {
+            width: 24px;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 15px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #05b98c;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+
+        .btn-warning:hover {
+            background: #e9bc4a;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d43a5c;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 24px;
+        }
+
+        .bg-primary {
+            background: rgba(67, 97, 238, 0.15);
+            color: var(--primary);
+        }
+
+        .bg-success {
+            background: rgba(6, 214, 160, 0.15);
+            color: var(--success);
+        }
+
+        .bg-warning {
+            background: rgba(255, 209, 102, 0.15);
+            color: var(--warning);
+        }
+
+        .bg-danger {
+            background: rgba(239, 71, 111, 0.15);
+            color: var(--danger);
+        }
+
+        .stat-info h3 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: var(--gray);
+            font-size: 15px;
+        }
+
+        /* Main Content Area */
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .card-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .card-tools {
+            display: flex;
+            gap: 15px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 10px 15px 10px 40px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 15px;
+            width: 240px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--light);
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            color: var(--dark);
+            font-size: 15px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(67, 97, 238, 0.03);
+        }
+
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .status-active {
+            background: rgba(6, 214, 160, 0.15);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: rgba(255, 209, 102, 0.15);
+            color: var(--warning);
+        }
+
+        .status-completed {
+            background: rgba(67, 97, 238, 0.15);
+            color: var(--primary);
+        }
+
+        .status-hold {
+            background: rgba(108, 117, 125, 0.15);
+            color: var(--gray);
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge-monthly {
+            background: rgba(114, 9, 183, 0.15);
+            color: var(--secondary);
+        }
+
+        .badge-project {
+            background: rgba(67, 97, 238, 0.15);
+            color: var(--primary);
+        }
+
+        .action-btn {
+            padding: 8px;
+            border-radius: 6px;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            font-size: 16px;
+        }
+
+        .action-btn:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+            margin-top: 10px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            background: var(--success);
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transform: translateX(120%);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background: var(--danger);
+        }
+        
+        .notification.warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+        
+        .notification.info {
+            background: var(--primary);
+        }
+
+        /* Page Sections */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .placeholder-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .placeholder-icon {
+            font-size: 64px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .placeholder-text {
+            font-size: 18px;
+            color: var(--gray);
+            max-width: 500px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        /* Chart Styles */
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .chart-header {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chart {
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-placeholder {
+            text-align: center;
+            color: var(--gray);
+        }
+        
+        /* Team member cards */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .team-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .team-name {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .team-role {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+        
+        .team-stats {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .team-stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .logo h1, .nav-item span {
+                display: none;
+            }
+            
+            .logo {
+                justify-content: center;
+                padding: 0 0 25px 0;
+            }
+            
+            .logo i {
+                margin-right: 0;
+            }
+            
+            .nav-item {
+                justify-content: center;
+                padding: 18px 0;
+            }
+            
+            .nav-item i {
+                margin-right: 0;
+            }
+            
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-box input {
+                width: 180px;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-user-friends"></i>
+            <h1>ClientSync</h1>
+        </div>
+        <div class="nav-links">
+            <div class="nav-item active" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" data-page="clients">
+                <i class="fas fa-users"></i>
+                <span>Clients</span>
+            </div>
+            <div class="nav-item" data-page="projects">
+                <i class="fas fa-tasks"></i>
+                <span>Projects</span>
+            </div>
+            <div class="nav-item" data-page="payments">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Payments</span>
+            </div>
+            <div class="nav-item" data-page="reports">
+                <i class="fas fa-chart-bar"></i>
+                <span>Reports</span>
+            </div>
+            <div class="nav-item" data-page="settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="page active">
+            <!-- Header -->
+            <div class="header">
+                <h2>Client Dashboard</h2>
+                <div class="header-actions">
+                    <button class="btn btn-outline" id="exportBtn">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button class="btn btn-primary" id="addClientBtn">
+                        <i class="fas fa-plus"></i> Add Client
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon bg-primary">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalClients">24</h3>
+                        <p>Total Clients</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon bg-success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="activeProjects">18</h3>
+                        <p>Active Projects</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon bg-warning">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="pendingPayments">৳ 87,500</h3>
+                        <p>Pending Payments</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon bg-danger">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalRevenue">৳ 2,45,000</h3>
+                        <p>Total Revenue</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Client List -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>All Clients</h3>
+                    <div class="card-tools">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" placeholder="Search clients...">
+                        </div>
+                        <button class="action-btn" id="filterBtn">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="clientTable">
+                        <thead>
+                            <tr>
+                                <th>Client Name</th>
+                                <th>Project</th>
+                                <th>Team</th>
+                                <th>Package</th>
+                                <th>Budget</th>
+                                <th>Paid</th>
+                                <th>Due</th>
+                                <th>Status</th>
+                                <th>Content</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientTableBody">
+                            <tr>
+                                <td>Nafis Ahmed</td>
+                                <td>
+                                    <a href="#" class="badge badge-project">E-commerce Site</a>
+                                </td>
+                                <td>Team A</td>
+                                <td>Premium</td>
+                                <td>৳ 75,000</td>
+                                <td>৳ 45,000</td>
+                                <td>৳ 30,000</td>
+                                <td><span class="status status-active">Active</span></td>
+                                <td>-</td>
+                                <td>
+                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Rahim Traders</td>
+                                <td>
+                                    <a href="#" class="badge badge-project">Inventory System</a>
+                                </td>
+                                <td>Team C</td>
+                                <td>Business</td>
+                                <td>৳ 1,20,000</td>
+                                <td>৳ 60,000</td>
+                                <td>৳ 60,000</td>
+                                <td><span class="status status-pending">Pending</span></td>
+                                <td>-</td>
+                                <td>
+                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tech Solutions Ltd.</td>
+                                <td>
+                                    <a href="#" class="badge badge-monthly">Content Service</a>
+                                </td>
+                                <td>Team B</td>
+                                <td>Monthly</td>
+                                <td>৳ 25,000/mo</td>
+                                <td>৳ 25,000</td>
+                                <td>৳ 0</td>
+                                <td><span class="status status-completed">Completed</span></td>
+                                <td>8/12</td>
+                                <td>
+                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Fashion BD</td>
+                                <td>
+                                    <a href="#" class="badge badge-project">Brand Website</a>
+                                </td>
+                                <td>Team A</td>
+                                <td>Standard</td>
+                                <td>৳ 50,000</td>
+                                <td>৳ 30,000</td>
+                                <td>৳ 20,000</td>
+                                <td><span class="status status-active">Active</span></td>
+                                <td>-</td>
+                                <td>
+                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Digital Marketing Pro</td>
+                                <td>
+                                    <a href="#" class="badge badge-monthly">SEO Service</a>
+                                </td>
+                                <td>Team D</td>
+                                <td>Monthly</td>
+                                <td>৳ 35,000/mo</td>
+                                <td>৳ 35,000</td>
+                                <td>৳ 0</td>
+                                <td><span class="status status-hold">On Hold</span></td>
+                                <td>5/8</td>
+                                <td>
+                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Add Client Form -->
+            <div class="content-card" id="clientForm" style="display: none;">
+                <div class="card-header">
+                    <h3>Add New Client</h3>
+                </div>
+                <form id="clientFormData">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="clientName">Client Name *</label>
+                            <input type="text" id="clientName" class="form-control" placeholder="Enter client name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="projectLink">Project Link *</label>
+                            <input type="text" id="projectLink" class="form-control" placeholder="Enter project URL" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teamMember">Assign Team Member *</label>
+                            <select id="teamMember" class="form-control" required>
+                                <option value="">Select team member</option>
+                                <option value="Team A">Team A</option>
+                                <option value="Team B">Team B</option>
+                                <option value="Team C">Team C</option>
+                                <option value="Team D">Team D</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="package">Package Name *</label>
+                            <select id="package" class="form-control" required>
+                                <option value="">Select package</option>
+                                <option value="Standard">Standard</option>
+                                <option value="Premium">Premium</option>
+                                <option value="Business">Business</option>
+                                <option value="Monthly">Monthly</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="budget">Budget (BDT) *</label>
+                            <input type="number" id="budget" class="form-control" placeholder="Enter budget amount" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="paid">Paid Amount (BDT) *</label>
+                            <input type="number" id="paid" class="form-control" placeholder="Enter paid amount" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Work Status *</label>
+                            <select id="status" class="form-control" required>
+                                <option value="active">Active</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="hold">On Hold</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="contentField" style="display: none;">
+                            <label for="contentDelivered">Content Delivered (Monthly Clients)</label>
+                            <input type="text" id="contentDelivered" class="form-control" placeholder="e.g. 8/12">
+                        </div>
+                    </div>
+                    <div class="form-footer">
+                        <button type="button" class="btn btn-outline" id="cancelForm">Cancel</button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save Client
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Clients Page -->
+        <div id="clientsPage" class="page">
+            <div class="header">
+                <h2>Clients Management</h2>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="newClientBtn">
+                        <i class="fas fa-plus"></i> New Client
+                    </button>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>All Clients</h3>
+                    <div class="card-tools">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search clients...">
+                        </div>
+                        <button class="action-btn">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Client Name</th>
+                                <th>Project</th>
+                                <th>Team</th>
+                                <th>Package</th>
+                                <th>Budget</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Nafis Ahmed</td>
+                                <td>E-commerce Site</td>
+                                <td>Team A</td>
+                                <td>Premium</td>
+                                <td>৳ 75,000</td>
+                                <td><span class="status status-active">Active</span></td>
+                                <td>
+                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Rahim Traders</td>
+                                <td>Inventory System</td>
+                                <td>Team C</td>
+                                <td>Business</td>
+                                <td>৳ 1,20,000</td>
+                                <td><span class="status status-pending">Pending</span></td>
+                                <td>
+                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tech Solutions Ltd.</td>
+                                <td>Content Service</td>
+                                <td>Team B</td>
+                                <td>Monthly</td>
+                                <td>৳ 25,000/mo</td>
+                                <td><span class="status status-completed">Completed</span></td>
+                                <td>
+                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Page -->
+        <div id="projectsPage" class="page">
+            <div class="header">
+                <h2>Project Management</h2>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="newProjectBtn">
+                        <i class="fas fa-plus"></i> New Project
+                    </button>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>Active Projects</h3>
+                    <div class="card-tools">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search projects...">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-grid">
+                    <div class="team-card">
+                        <div class="team-avatar" style="background-color: #4361ee;">TA</div>
+                        <div class="team-name">Team A</div>
+                        <div class="team-role">Web Development</div>
+                        <div class="team-stats">
+                            <div class="team-stat">
+                                <div class="stat-value">5</div>
+                                <div class="stat-label">Projects</div>
+                            </div>
+                            <div class="team-stat">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Active</div>
+                            </div>
+                            <div class="team-stat">
+                                <div class="stat-value">৳ 2.1L</div>
+                                <div class="stat-label">Revenue</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="team-card">
+                        <div class="team-avatar" style="background-color: #7209b7;">TB</div>
+                        <div class="team-name">Team B</div>
+                        <div class="team-role">Content Creation</div>
+                        <div class="team-stats">
+                            <div class="team-stat">
+                                <div class="stat-value">8</div>
+                                <div class="stat-label">Projects</div>
+                            </div>
+                            <div class="team-stat">
+                                <div class="stat-value">6</div>
+                                <div class="stat-label">Active</div>
+                            </div>
+                            <div class="team-stat">
+                                <div class="stat-value">৳ 1.8L</div>
+                                <div class="stat-label">Revenue</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="team-card">
+                        <div class="team-avatar" style="background-color: #06d6a0;">TC</div>
+                        <div class="team-name">Team C</div>
+                        <div class="team-role">Mobile Apps</div>
+                        <div class="team-stats">
+                            <div class="team-stat">
+                                <div class="stat-value">4</div>
+                                <div class="stat-label">Projects</div>
+                            </div>
+                            <div class="team-stat">
+                                <div class="stat-value">2</div>
+                                <div class="stat-label">Active</div>
+                            </div>
+                            <div class="team-stat">
+                                <div class="stat-value">৳ 1.5L</div>
+                                <div class="stat-label">Revenue</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="team-card">
+                        <div class="team-avatar" style="background-color: #ef476f;">TD</div>
+                        <div class="team-name">Team D</div>
+                        <div class="team-role">SEO & Marketing</div>
+                        <div class="team-stats">
+                            <div class="team-stat">
+                                <div class="stat-value">7</div>
+                                <div class="stat-label">Projects</div>
+                            </div>
+                            <div class="team-stat">
+                                <div class="stat-value">5</div>
+                                <div class="stat-label">Active</div>
+                            </div>
+                            <div class="team-stat">
+                                <div class="stat-value">৳ 1.2L</div>
+                                <div class="stat-label">Revenue</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payments Page -->
+        <div id="paymentsPage" class="page">
+            <div class="header">
+                <h2>Payment Management</h2>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="recordPaymentBtn">
+                        <i class="fas fa-plus"></i> Record Payment
+                    </button>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>Recent Payments</h3>
+                    <div class="card-tools">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search payments...">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Client</th>
+                                <th>Project</th>
+                                <th>Amount (BDT)</th>
+                                <th>Method</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>22 Jun 2023</td>
+                                <td>Fashion BD</td>
+                                <td>Brand Website</td>
+                                <td>৳ 30,000</td>
+                                <td>Bank Transfer</td>
+                                <td><span class="status status-completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>20 Jun 2023</td>
+                                <td>Tech Solutions Ltd.</td>
+                                <td>Content Service</td>
+                                <td>৳ 25,000</td>
+                                <td>Credit Card</td>
+                                <td><span class="status status-completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>18 Jun 2023</td>
+                                <td>Rahim Traders</td>
+                                <td>Inventory System</td>
+                                <td>৳ 60,000</td>
+                                <td>Bank Transfer</td>
+                                <td><span class="status status-pending">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>15 Jun 2023</td>
+                                <td>Digital Marketing Pro</td>
+                                <td>SEO Service</td>
+                                <td>৳ 35,000</td>
+                                <td>Mobile Banking</td>
+                                <td><span class="status status-completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>10 Jun 2023</td>
+                                <td>Nafis Ahmed</td>
+                                <td>E-commerce Site</td>
+                                <td>৳ 45,000</td>
+                                <td>Bank Transfer</td>
+                                <td><span class="status status-completed">Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Page -->
+        <div id="reportsPage" class="page">
+            <div class="header">
+                <h2>Reports & Analytics</h2>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="exportReportBtn">
+                        <i class="fas fa-download"></i> Export Report
+                    </button>
+                </div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon bg-primary">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>৳ 2.45L</h3>
+                        <p>Total Revenue</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon bg-success">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>24</h3>
+                        <p>Completed Projects</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon bg-warning">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>18</h3>
+                        <p>Active Clients</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon bg-danger">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>৳ 87.5K</h3>
+                        <p>Pending Payments</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Revenue Overview</h3>
+                        <select class="form-control" style="width: 150px;">
+                            <option>Last 30 Days</option>
+                            <option>Last 90 Days</option>
+                            <option>Last Year</option>
+                        </select>
+                    </div>
+                    <div class="chart">
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-bar" style="font-size: 48px; margin-bottom: 15px;"></i>
+                            <p>Revenue chart will appear here</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Project Status</h3>
+                    </div>
+                    <div class="chart">
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-pie" style="font-size: 48px; margin-bottom: 15px;"></i>
+                            <p>Project status chart will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settingsPage" class="page">
+            <div class="header">
+                <h2>System Settings</h2>
+            </div>
+            
+            <div class="content-card">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Business Name</label>
+                        <input type="text" class="form-control" value="ClientSync Solutions" placeholder="Enter business name">
+                    </div>
+                    <div class="form-group">
+                        <label>Currency</label>
+                        <select class="form-control">
+                            <option selected>Bangladeshi Taka (BDT)</option>
+                            <option>US Dollar (USD)</option>
+                            <option>Euro (EUR)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date Format</label>
+                        <select class="form-control">
+                            <option>DD/MM/YYYY</option>
+                            <option selected>MM/DD/YYYY</option>
+                            <option>YYYY-MM-DD</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Notification Preferences</label>
+                        <select class="form-control">
+                            <option selected>Email & In-app</option>
+                            <option>Email Only</option>
+                            <option>In-app Only</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Default Team</label>
+                        <select class="form-control">
+                            <option>Team A</option>
+                            <option>Team B</option>
+                            <option selected>Team C</option>
+                            <option>Team D</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Invoice Template</label>
+                        <select class="form-control">
+                            <option selected>Standard</option>
+                            <option>Professional</option>
+                            <option>Minimal</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-footer">
+                    <button class="btn btn-outline" id="resetSettingsBtn">Reset</button>
+                    <button class="btn btn-success" id="saveSettingsBtn">Save Settings</button>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>Team Members</h3>
+                    <button class="btn btn-primary" id="addMemberBtn">
+                        <i class="fas fa-plus"></i> Add Member
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Team</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Rahim Islam</td>
+                                <td>rahim@clientsync.com</td>
+                                <td>Developer</td>
+                                <td>Team A</td>
+                                <td><span class="status status-active">Active</span></td>
+                                <td>
+                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Fatima Akter</td>
+                                <td>fatima@clientsync.com</td>
+                                <td>Designer</td>
+                                <td>Team B</td>
+                                <td><span class="status status-active">Active</span></td>
+                                <td>
+                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Karim Uddin</td>
+                                <td>karim@clientsync.com</td>
+                                <td>Project Manager</td>
+                                <td>Team C</td>
+                                <td><span class="status status-hold">On Leave</span></td>
+                                <td>
+                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i> Client added successfully!
+    </div>
+
+    <script>
+        // DOM Elements
+        const clientForm = document.getElementById('clientForm');
+        const addClientBtn = document.getElementById('addClientBtn');
+        const cancelForm = document.getElementById('cancelForm');
+        const packageSelect = document.getElementById('package');
+        const contentField = document.getElementById('contentField');
+        const clientFormData = document.getElementById('clientFormData');
+        const clientTableBody = document.getElementById('clientTableBody');
+        const notification = document.getElementById('notification');
+        const searchInput = document.getElementById('searchInput');
+        
+        // Page navigation elements
+        const navItems = document.querySelectorAll('.nav-item');
+        const pages = document.querySelectorAll('.page');
+        
+        // Counters for stats
+        let totalClients = 24;
+        let activeProjects = 18;
+        let pendingPayments = 87500;
+        let totalRevenue = 245000;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up all button event listeners
+            setupEventListeners();
+        });
+
+        // Set up all button event listeners
+        function setupEventListeners() {
+            // Dashboard page buttons
+            addClientBtn.addEventListener('click', showClientForm);
+            cancelForm.addEventListener('click', hideClientForm);
+            packageSelect.addEventListener('change', toggleContentField);
+            clientFormData.addEventListener('submit', handleClientFormSubmit);
+            document.getElementById('exportBtn').addEventListener('click', exportData);
+            document.getElementById('filterBtn').addEventListener('click', showFilterOptions);
+            
+            // Clients page buttons
+            document.getElementById('newClientBtn').addEventListener('click', showClientForm);
+            
+            // Projects page buttons
+            document.getElementById('newProjectBtn').addEventListener('click', createNewProject);
+            
+            // Payments page buttons
+            document.getElementById('recordPaymentBtn').addEventListener('click', recordPayment);
+            
+            // Reports page buttons
+            document.getElementById('exportReportBtn').addEventListener('click', exportReport);
+            
+            // Settings page buttons
+            document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+            document.getElementById('resetSettingsBtn').addEventListener('click', resetSettings);
+            document.getElementById('addMemberBtn').addEventListener('click', addTeamMember);
+            
+            // Navigation
+            navItems.forEach(item => {
+                item.addEventListener('click', navigateToPage);
+            });
+            
+            // Search functionality
+            searchInput.addEventListener('input', searchClients);
+        }
+
+        // Navigation functions
+        function navigateToPage() {
+            const pageId = this.getAttribute('data-page') + 'Page';
+            
+            // Update active nav item
+            navItems.forEach(navItem => navItem.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show the selected page
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Client form functions
+        function showClientForm() {
+            // Navigate to dashboard if not already there
+            if (!document.getElementById('dashboardPage').classList.contains('active')) {
+                navItems.forEach(navItem => navItem.classList.remove('active'));
+                document.querySelector('.nav-item[data-page="dashboard"]').classList.add('active');
+                pages.forEach(page => page.classList.remove('active'));
+                document.getElementById('dashboardPage').classList.add('active');
+            }
+            
+            clientForm.style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        function hideClientForm() {
+            clientForm.style.display = 'none';
+            clientFormData.reset();
+            contentField.style.display = 'none';
+        }
+
+        function toggleContentField() {
+            if (this.value === 'Monthly') {
+                contentField.style.display = 'block';
+            } else {
+                contentField.style.display = 'none';
+            }
+        }
+
+        function handleClientFormSubmit(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const clientName = document.getElementById('clientName').value;
+            const projectLink = document.getElementById('projectLink').value;
+            const teamMember = document.getElementById('teamMember').value;
+            const packageName = document.getElementById('package').value;
+            const budget = document.getElementById('budget').value;
+            const paid = document.getElementById('paid').value;
+            const status = document.getElementById('status').value;
+            const contentDelivered = document.getElementById('contentDelivered').value || '-';
+            
+            // Calculate due amount
+            const due = parseInt(budget) - parseInt(paid);
+            
+            // Create new table row
+            const newRow = document.createElement('tr');
+            
+            // Determine badge class based on package
+            const badgeClass = packageName === 'Monthly' ? 'badge-monthly' : 'badge-project';
+            
+            // Determine status class
+            let statusClass;
+            switch(status) {
+                case 'active': statusClass = 'status-active'; break;
+                case 'pending': statusClass = 'status-pending'; break;
+                case 'completed': statusClass = 'status-completed'; break;
+                case 'hold': statusClass = 'status-hold'; break;
+                default: statusClass = 'status-active';
+            }
+            
+            // Status text
+            const statusText = status.charAt(0).toUpperCase() + status.slice(1);
+            
+            // Add data to row
+            newRow.innerHTML = `
+                <td>${clientName}</td>
+                <td>
+                    <a href="${projectLink}" class="badge ${badgeClass}">${projectLink.substring(0, 15)}...</a>
+                </td>
+                <td>${teamMember}</td>
+                <td>${packageName}</td>
+                <td>৳ ${parseInt(budget).toLocaleString()}</td>
+                <td>৳ ${parseInt(paid).toLocaleString()}</td>
+                <td>৳ ${due.toLocaleString()}</td>
+                <td><span class="status ${statusClass}">${statusText}</span></td>
+                <td>${contentDelivered}</td>
+                <td>
+                    <button class="action-btn"><i class="fas fa-edit"></i></button>
+                    <button class="action-btn" onclick="deleteClient(this)"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            `;
+            
+            // Add row to table
+            clientTableBody.prepend(newRow);
+            
+            // Update stats
+            totalClients++;
+            document.getElementById('totalClients').textContent = totalClients;
+            
+            if (status === 'active') {
+                activeProjects++;
+                document.getElementById('activeProjects').textContent = activeProjects;
+            }
+            
+            pendingPayments += due;
+            document.getElementById('pendingPayments').textContent = `৳ ${pendingPayments.toLocaleString()}`;
+            
+            totalRevenue += parseInt(paid);
+            document.getElementById('totalRevenue').textContent = `৳ ${totalRevenue.toLocaleString()}`;
+            
+            // Show notification
+            showNotification('Client added successfully!', 'success');
+            
+            // Reset form and hide
+            clientFormData.reset();
+            clientForm.style.display = 'none';
+            contentField.style.display = 'none';
+        }
+
+        // Delete client function
+        window.deleteClient = function(button) {
+            const row = button.closest('tr');
+            row.remove();
+            totalClients--;
+            document.getElementById('totalClients').textContent = totalClients;
+            
+            showNotification('Client deleted successfully!', 'error');
+        }
+
+        // Search functionality
+        function searchClients() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = clientTableBody.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                const clientName = row.cells[0].textContent.toLowerCase();
+                if (clientName.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Other page button functions
+        function exportData() {
+            showNotification('Data exported successfully!', 'info');
+        }
+
+        function showFilterOptions() {
+            showNotification('Filter options panel opened', 'info');
+        }
+
+        function createNewProject() {
+            showNotification('New project form opened', 'info');
+        }
+
+        function recordPayment() {
+            showNotification('Record payment form opened', 'info');
+        }
+
+        function exportReport() {
+            showNotification('Report exported successfully!', 'info');
+        }
+
+        function saveSettings() {
+            showNotification('Settings saved successfully!', 'success');
+        }
+
+        function resetSettings() {
+            showNotification('Settings reset to default', 'warning');
+        }
+
+        function addTeamMember() {
+            showNotification('Add team member form opened', 'info');
+        }
+
+        // Notification function
+        function showNotification(message, type = 'success') {
+            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 
+                type === 'error' ? 'exclamation-circle' : 
+                type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i> ${message}`;
+            
+            notification.className = 'notification';
+            notification.classList.add(type);
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initial hide of content field
+        contentField.style.display = 'none';
+    </script>
+</body>
+</html>
