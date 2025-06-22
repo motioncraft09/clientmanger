@@ -611,6 +611,35 @@
             font-size: 13px;
             color: var(--gray);
         }
+        
+        /* Empty state */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: var(--light-gray);
+        }
+        
+        .empty-state h4 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .empty-state p {
+            max-width: 500px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
 
         /* Responsive */
         @media (max-width: 992px) {
@@ -730,7 +759,7 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <div class="stat-info">
-                        <h3 id="totalClients">2</h3>
+                        <h3 id="totalClients">0</h3>
                         <p>Total Clients</p>
                     </div>
                 </div>
@@ -739,7 +768,7 @@
                         <i class="fas fa-check-circle"></i>
                     </div>
                     <div class="stat-info">
-                        <h3 id="activeProjects">2</h3>
+                        <h3 id="activeProjects">0</h3>
                         <p>Active Projects</p>
                     </div>
                 </div>
@@ -748,7 +777,7 @@
                         <i class="fas fa-exclamation-circle"></i>
                     </div>
                     <div class="stat-info">
-                        <h3 id="pendingPayments">৳ 9,098</h3>
+                        <h3 id="pendingPayments">৳ 0</h3>
                         <p>Pending Payments</p>
                     </div>
                 </div>
@@ -757,7 +786,7 @@
                         <i class="fas fa-chart-line"></i>
                     </div>
                     <div class="stat-info">
-                        <h3 id="totalRevenue">৳ 9,698</h3>
+                        <h3 id="totalRevenue">৳ 0</h3>
                         <p>Total Revenue</p>
                     </div>
                 </div>
@@ -794,89 +823,17 @@
                             </tr>
                         </thead>
                         <tbody id="clientTableBody">
-                            <tr>
-                                <td>Nafis Ahmed</td>
-                                <td>
-                                    <a href="#" class="badge badge-project">E-commerce Site</a>
-                                </td>
-                                <td>Team A</td>
-                                <td>Premium</td>
-                                <td>৳ 75,000</td>
-                                <td>৳ 45,000</td>
-                                <td>৳ 30,000</td>
-                                <td><span class="status status-active">Active</span></td>
-                                <td>-</td>
-                                <td>
-                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Rahim Traders</td>
-                                <td>
-                                    <a href="#" class="badge badge-project">Inventory System</a>
-                                </td>
-                                <td>Team C</td>
-                                <td>Business</td>
-                                <td>৳ 1,20,000</td>
-                                <td>৳ 60,000</td>
-                                <td>৳ 60,000</td>
-                                <td><span class="status status-pending">Pending</span></td>
-                                <td>-</td>
-                                <td>
-                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Tech Solutions Ltd.</td>
-                                <td>
-                                    <a href="#" class="badge badge-monthly">Content Service</a>
-                                </td>
-                                <td>Team B</td>
-                                <td>Monthly</td>
-                                <td>৳ 25,000/mo</td>
-                                <td>৳ 25,000</td>
-                                <td>৳ 0</td>
-                                <td><span class="status status-completed">Completed</span></td>
-                                <td>8/12</td>
-                                <td>
-                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Fashion BD</td>
-                                <td>
-                                    <a href="#" class="badge badge-project">Brand Website</a>
-                                </td>
-                                <td>Team A</td>
-                                <td>Standard</td>
-                                <td>৳ 50,000</td>
-                                <td>৳ 30,000</td>
-                                <td>৳ 20,000</td>
-                                <td><span class="status status-active">Active</span></td>
-                                <td>-</td>
-                                <td>
-                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Digital Marketing Pro</td>
-                                <td>
-                                    <a href="#" class="badge badge-monthly">SEO Service</a>
-                                </td>
-                                <td>Team D</td>
-                                <td>Monthly</td>
-                                <td>৳ 35,000/mo</td>
-                                <td>৳ 35,000</td>
-                                <td>৳ 0</td>
-                                <td><span class="status status-hold">On Hold</span></td>
-                                <td>5/8</td>
-                                <td>
-                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                            <!-- Empty state by default -->
+                            <tr id="emptyClientRow">
+                                <td colspan="10">
+                                    <div class="empty-state">
+                                        <i class="fas fa-user-friends"></i>
+                                        <h4>No Clients Found</h4>
+                                        <p>You haven't added any clients yet. Click the "Add Client" button to get started.</p>
+                                        <button class="btn btn-primary" id="addFirstClientBtn">
+                                            <i class="fas fa-plus"></i> Add Your First Client
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -884,10 +841,10 @@
                 </div>
             </div>
 
-            <!-- Add Client Form -->
+            <!-- Client Form -->
             <div class="content-card" id="clientForm" style="display: none;">
                 <div class="card-header">
-                    <h3>Add New Client</h3>
+                    <h3 id="formTitle">Add New Client</h3>
                 </div>
                 <form id="clientFormData">
                     <div class="form-grid">
@@ -943,7 +900,7 @@
                     </div>
                     <div class="form-footer">
                         <button type="button" class="btn btn-outline" id="cancelForm">Cancel</button>
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-success" id="saveClientBtn">
                             <i class="fas fa-save"></i> Save Client
                         </button>
                     </div>
@@ -951,6 +908,7 @@
             </div>
         </div>
 
+        <!-- Other Pages -->
         <!-- Clients Page -->
         <div id="clientsPage" class="page">
             <div class="header">
@@ -990,39 +948,15 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Nafis Ahmed</td>
-                                <td>E-commerce Site</td>
-                                <td>Team A</td>
-                                <td>Premium</td>
-                                <td>৳ 75,000</td>
-                                <td><span class="status status-active">Active</span></td>
-                                <td>
-                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Rahim Traders</td>
-                                <td>Inventory System</td>
-                                <td>Team C</td>
-                                <td>Business</td>
-                                <td>৳ 1,20,000</td>
-                                <td><span class="status status-pending">Pending</span></td>
-                                <td>
-                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Tech Solutions Ltd.</td>
-                                <td>Content Service</td>
-                                <td>Team B</td>
-                                <td>Monthly</td>
-                                <td>৳ 25,000/mo</td>
-                                <td><span class="status status-completed">Completed</span></td>
-                                <td>
-                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                                <td colspan="7">
+                                    <div class="empty-state">
+                                        <i class="fas fa-users"></i>
+                                        <h4>No Clients Found</h4>
+                                        <p>You haven't added any clients yet. Click the "New Client" button to get started.</p>
+                                        <button class="btn btn-primary" id="addClientFromClientsBtn">
+                                            <i class="fas fa-plus"></i> Add Your First Client
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -1043,96 +977,18 @@
             </div>
             
             <div class="content-card">
-                <div class="card-header">
-                    <h3>Active Projects</h3>
-                    <div class="card-tools">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" placeholder="Search projects...">
-                        </div>
+                <div class="placeholder-content">
+                    <div class="placeholder-icon">
+                        <i class="fas fa-tasks"></i>
                     </div>
-                </div>
-                
-                <div class="team-grid">
-                    <div class="team-card">
-                        <div class="team-avatar" style="background-color: #4361ee;">TA</div>
-                        <div class="team-name">Team A</div>
-                        <div class="team-role">Web Development</div>
-                        <div class="team-stats">
-                            <div class="team-stat">
-                                <div class="stat-value">5</div>
-                                <div class="stat-label">Projects</div>
-                            </div>
-                            <div class="team-stat">
-                                <div class="stat-value">3</div>
-                                <div class="stat-label">Active</div>
-                            </div>
-                            <div class="team-stat">
-                                <div class="stat-value">৳ 2.1L</div>
-                                <div class="stat-label">Revenue</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="team-card">
-                        <div class="team-avatar" style="background-color: #7209b7;">TB</div>
-                        <div class="team-name">Team B</div>
-                        <div class="team-role">Content Creation</div>
-                        <div class="team-stats">
-                            <div class="team-stat">
-                                <div class="stat-value">8</div>
-                                <div class="stat-label">Projects</div>
-                            </div>
-                            <div class="team-stat">
-                                <div class="stat-value">6</div>
-                                <div class="stat-label">Active</div>
-                            </div>
-                            <div class="team-stat">
-                                <div class="stat-value">৳ 1.8L</div>
-                                <div class="stat-label">Revenue</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="team-card">
-                        <div class="team-avatar" style="background-color: #06d6a0;">TC</div>
-                        <div class="team-name">Team C</div>
-                        <div class="team-role">Mobile Apps</div>
-                        <div class="team-stats">
-                            <div class="team-stat">
-                                <div class="stat-value">4</div>
-                                <div class="stat-label">Projects</div>
-                            </div>
-                            <div class="team-stat">
-                                <div class="stat-value">2</div>
-                                <div class="stat-label">Active</div>
-                            </div>
-                            <div class="team-stat">
-                                <div class="stat-value">৳ 1.5L</div>
-                                <div class="stat-label">Revenue</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="team-card">
-                        <div class="team-avatar" style="background-color: #ef476f;">TD</div>
-                        <div class="team-name">Team D</div>
-                        <div class="team-role">SEO & Marketing</div>
-                        <div class="team-stats">
-                            <div class="team-stat">
-                                <div class="stat-value">7</div>
-                                <div class="stat-label">Projects</div>
-                            </div>
-                            <div class="team-stat">
-                                <div class="stat-value">5</div>
-                                <div class="stat-label">Active</div>
-                            </div>
-                            <div class="team-stat">
-                                <div class="stat-value">৳ 1.2L</div>
-                                <div class="stat-label">Revenue</div>
-                            </div>
-                        </div>
-                    </div>
+                    <h3>Project Dashboard</h3>
+                    <p class="placeholder-text">
+                        This is your project management hub. Track all ongoing projects, their status, assigned teams, 
+                        deadlines, and deliverables. Monitor progress and ensure timely completion of all projects.
+                    </p>
+                    <button class="btn btn-primary" style="margin-top: 20px;">
+                        <i class="fas fa-rocket"></i> Create New Project
+                    </button>
                 </div>
             </div>
         </div>
@@ -1149,71 +1005,18 @@
             </div>
             
             <div class="content-card">
-                <div class="card-header">
-                    <h3>Recent Payments</h3>
-                    <div class="card-tools">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" placeholder="Search payments...">
-                        </div>
+                <div class="placeholder-content">
+                    <div class="placeholder-icon">
+                        <i class="fas fa-money-bill-wave"></i>
                     </div>
-                </div>
-                
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Client</th>
-                                <th>Project</th>
-                                <th>Amount (BDT)</th>
-                                <th>Method</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>22 Jun 2023</td>
-                                <td>Fashion BD</td>
-                                <td>Brand Website</td>
-                                <td>৳ 30,000</td>
-                                <td>Bank Transfer</td>
-                                <td><span class="status status-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td>20 Jun 2023</td>
-                                <td>Tech Solutions Ltd.</td>
-                                <td>Content Service</td>
-                                <td>৳ 25,000</td>
-                                <td>Credit Card</td>
-                                <td><span class="status status-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td>18 Jun 2023</td>
-                                <td>Rahim Traders</td>
-                                <td>Inventory System</td>
-                                <td>৳ 60,000</td>
-                                <td>Bank Transfer</td>
-                                <td><span class="status status-pending">Pending</span></td>
-                            </tr>
-                            <tr>
-                                <td>15 Jun 2023</td>
-                                <td>Digital Marketing Pro</td>
-                                <td>SEO Service</td>
-                                <td>৳ 35,000</td>
-                                <td>Mobile Banking</td>
-                                <td><span class="status status-completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td>10 Jun 2023</td>
-                                <td>Nafis Ahmed</td>
-                                <td>E-commerce Site</td>
-                                <td>৳ 45,000</td>
-                                <td>Bank Transfer</td>
-                                <td><span class="status status-completed">Completed</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <h3>Payment Tracking</h3>
+                    <p class="placeholder-text">
+                        Manage all client payments in one place. Track received payments, pending dues, 
+                        and generate invoices. Get a clear overview of your financial transactions and revenue.
+                    </p>
+                    <button class="btn btn-success" style="margin-top: 20px;">
+                        <i class="fas fa-file-invoice"></i> Generate Reports
+                    </button>
                 </div>
             </div>
         </div>
@@ -1235,7 +1038,7 @@
                         <i class="fas fa-chart-line"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>৳ 2.45L</h3>
+                        <h3>৳ 0</h3>
                         <p>Total Revenue</p>
                     </div>
                 </div>
@@ -1244,7 +1047,7 @@
                         <i class="fas fa-chart-pie"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>24</h3>
+                        <h3>0</h3>
                         <p>Completed Projects</p>
                     </div>
                 </div>
@@ -1253,7 +1056,7 @@
                         <i class="fas fa-user-clock"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>18</h3>
+                        <h3>0</h3>
                         <p>Active Clients</p>
                     </div>
                 </div>
@@ -1262,7 +1065,7 @@
                         <i class="fas fa-money-bill-wave"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>৳ 87.5K</h3>
+                        <h3>৳ 0</h3>
                         <p>Pending Payments</p>
                     </div>
                 </div>
@@ -1381,36 +1184,15 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Rahim Islam</td>
-                                <td>rahim@clientsync.com</td>
-                                <td>Developer</td>
-                                <td>Team A</td>
-                                <td><span class="status status-active">Active</span></td>
-                                <td>
-                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Fatima Akter</td>
-                                <td>fatima@clientsync.com</td>
-                                <td>Designer</td>
-                                <td>Team B</td>
-                                <td><span class="status status-active">Active</span></td>
-                                <td>
-                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Karim Uddin</td>
-                                <td>karim@clientsync.com</td>
-                                <td>Project Manager</td>
-                                <td>Team C</td>
-                                <td><span class="status status-hold">On Leave</span></td>
-                                <td>
-                                    <button class="action-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <i class="fas fa-users"></i>
+                                        <h4>No Team Members</h4>
+                                        <p>You haven't added any team members yet. Click the "Add Member" button to get started.</p>
+                                        <button class="btn btn-primary">
+                                            <i class="fas fa-plus"></i> Add Team Member
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -1425,6 +1207,14 @@
     </div>
 
     <script>
+        // Initialize all counters to zero
+        let totalClients = 0;
+        let activeProjects = 0;
+        let pendingPayments = 0;
+        let totalRevenue = 0;
+        let editingClientId = null;
+        let clientCounter = 1; // Counter for generating client IDs
+
         // DOM Elements
         const clientForm = document.getElementById('clientForm');
         const addClientBtn = document.getElementById('addClientBtn');
@@ -1435,16 +1225,19 @@
         const clientTableBody = document.getElementById('clientTableBody');
         const notification = document.getElementById('notification');
         const searchInput = document.getElementById('searchInput');
+        const emptyClientRow = document.getElementById('emptyClientRow');
+        const formTitle = document.getElementById('formTitle');
+        const saveClientBtn = document.getElementById('saveClientBtn');
         
         // Page navigation elements
         const navItems = document.querySelectorAll('.nav-item');
         const pages = document.querySelectorAll('.page');
         
-        // Counters for stats
-        let totalClients = 24;
-        let activeProjects = 18;
-        let pendingPayments = 87500;
-        let totalRevenue = 245000;
+        // Set all stats to zero initially
+        document.getElementById('totalClients').textContent = totalClients;
+        document.getElementById('activeProjects').textContent = activeProjects;
+        document.getElementById('pendingPayments').textContent = `৳ ${pendingPayments}`;
+        document.getElementById('totalRevenue').textContent = `৳ ${totalRevenue}`;
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
@@ -1461,6 +1254,8 @@
             clientFormData.addEventListener('submit', handleClientFormSubmit);
             document.getElementById('exportBtn').addEventListener('click', exportData);
             document.getElementById('filterBtn').addEventListener('click', showFilterOptions);
+            document.getElementById('addFirstClientBtn').addEventListener('click', showClientForm);
+            document.getElementById('addClientFromClientsBtn').addEventListener('click', showClientForm);
             
             // Clients page buttons
             document.getElementById('newClientBtn').addEventListener('click', showClientForm);
@@ -1511,6 +1306,12 @@
                 document.getElementById('dashboardPage').classList.add('active');
             }
             
+            // Reset form and set to add mode
+            clientFormData.reset();
+            editingClientId = null;
+            formTitle.textContent = "Add New Client";
+            saveClientBtn.innerHTML = '<i class="fas fa-save"></i> Save Client';
+            contentField.style.display = 'none';
             clientForm.style.display = 'block';
             window.scrollTo(0, document.body.scrollHeight);
         }
@@ -1519,6 +1320,7 @@
             clientForm.style.display = 'none';
             clientFormData.reset();
             contentField.style.display = 'none';
+            editingClientId = null;
         }
 
         function toggleContentField() {
@@ -1527,6 +1329,45 @@
             } else {
                 contentField.style.display = 'none';
             }
+        }
+
+        function editClient(button) {
+            const row = button.closest('tr');
+            const clientId = row.dataset.id;
+            editingClientId = clientId;
+            
+            // Extract data from the row
+            const clientName = row.cells[0].textContent;
+            const projectLink = row.cells[1].querySelector('a').href;
+            const teamMember = row.cells[2].textContent;
+            const packageName = row.cells[3].textContent;
+            const budget = parseFloat(row.cells[4].textContent.replace('৳', '').replace(/,/g, ''));
+            const paid = parseFloat(row.cells[5].textContent.replace('৳', '').replace(/,/g, ''));
+            const status = row.cells[7].querySelector('.status').textContent.toLowerCase();
+            const contentDelivered = row.cells[8].textContent;
+            
+            // Populate the form
+            document.getElementById('clientName').value = clientName;
+            document.getElementById('projectLink').value = projectLink;
+            document.getElementById('teamMember').value = teamMember;
+            document.getElementById('package').value = packageName;
+            document.getElementById('budget').value = budget;
+            document.getElementById('paid').value = paid;
+            document.getElementById('status').value = status;
+            
+            // Show content field if monthly package
+            if (packageName === 'Monthly') {
+                document.getElementById('contentField').style.display = 'block';
+                document.getElementById('contentDelivered').value = contentDelivered;
+            } else {
+                document.getElementById('contentField').style.display = 'none';
+            }
+            
+            // Change form to edit mode
+            formTitle.textContent = "Edit Client";
+            saveClientBtn.innerHTML = '<i class="fas fa-save"></i> Update Client';
+            clientForm.style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
         }
 
         function handleClientFormSubmit(e) {
@@ -1545,79 +1386,212 @@
             // Calculate due amount
             const due = parseInt(budget) - parseInt(paid);
             
-            // Create new table row
-            const newRow = document.createElement('tr');
-            
-            // Determine badge class based on package
-            const badgeClass = packageName === 'Monthly' ? 'badge-monthly' : 'badge-project';
-            
-            // Determine status class
-            let statusClass;
-            switch(status) {
-                case 'active': statusClass = 'status-active'; break;
-                case 'pending': statusClass = 'status-pending'; break;
-                case 'completed': statusClass = 'status-completed'; break;
-                case 'hold': statusClass = 'status-hold'; break;
-                default: statusClass = 'status-active';
-            }
-            
-            // Status text
-            const statusText = status.charAt(0).toUpperCase() + status.slice(1);
-            
-            // Add data to row
-            newRow.innerHTML = `
-                <td>${clientName}</td>
-                <td>
-                    <a href="${projectLink}" class="badge ${badgeClass}">${projectLink.substring(0, 15)}...</a>
-                </td>
-                <td>${teamMember}</td>
-                <td>${packageName}</td>
-                <td>৳ ${parseInt(budget).toLocaleString()}</td>
-                <td>৳ ${parseInt(paid).toLocaleString()}</td>
-                <td>৳ ${due.toLocaleString()}</td>
-                <td><span class="status ${statusClass}">${statusText}</span></td>
-                <td>${contentDelivered}</td>
-                <td>
-                    <button class="action-btn"><i class="fas fa-edit"></i></button>
-                    <button class="action-btn" onclick="deleteClient(this)"><i class="fas fa-trash-alt"></i></button>
-                </td>
-            `;
-            
-            // Add row to table
-            clientTableBody.prepend(newRow);
-            
-            // Update stats
-            totalClients++;
-            document.getElementById('totalClients').textContent = totalClients;
-            
-            if (status === 'active') {
-                activeProjects++;
+            if (editingClientId) {
+                // Update existing client
+                const row = document.querySelector(`tr[data-id="${editingClientId}"]`);
+                
+                // Get old values for stats adjustment
+                const oldPaid = parseFloat(row.cells[5].textContent.replace('৳', '').replace(/,/g, ''));
+                const oldDue = parseFloat(row.cells[6].textContent.replace('৳', '').replace(/,/g, ''));
+                const oldStatus = row.cells[7].querySelector('.status').textContent.toLowerCase();
+                
+                // Determine badge class based on package
+                const badgeClass = packageName === 'Monthly' ? 'badge-monthly' : 'badge-project';
+                
+                // Determine status class
+                let statusClass;
+                switch(status) {
+                    case 'active': statusClass = 'status-active'; break;
+                    case 'pending': statusClass = 'status-pending'; break;
+                    case 'completed': statusClass = 'status-completed'; break;
+                    case 'hold': statusClass = 'status-hold'; break;
+                    default: statusClass = 'status-active';
+                }
+                
+                // Status text
+                const statusText = status.charAt(0).toUpperCase() + status.slice(1);
+                
+                // Update the row
+                row.innerHTML = `
+                    <td>${clientName}</td>
+                    <td>
+                        <a href="${projectLink}" class="badge ${badgeClass}">${projectLink.substring(0, 15)}...</a>
+                    </td>
+                    <td>${teamMember}</td>
+                    <td>${packageName}</td>
+                    <td>৳ ${parseInt(budget).toLocaleString()}</td>
+                    <td>৳ ${parseInt(paid).toLocaleString()}</td>
+                    <td>৳ ${due.toLocaleString()}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>${contentDelivered}</td>
+                    <td>
+                        <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                `;
+                
+                // Reattach event listeners
+                row.querySelector('.edit-btn').addEventListener('click', function() {
+                    editClient(this);
+                });
+                
+                row.querySelector('.delete-btn').addEventListener('click', function() {
+                    deleteClient(this);
+                });
+                
+                // Update stats
+                totalRevenue = totalRevenue - oldPaid + parseInt(paid);
+                pendingPayments = pendingPayments - oldDue + due;
+                
+                // Update active projects if status changed
+                if (oldStatus === 'active' && status !== 'active') {
+                    activeProjects--;
+                } else if (oldStatus !== 'active' && status === 'active') {
+                    activeProjects++;
+                }
+                
                 document.getElementById('activeProjects').textContent = activeProjects;
+                document.getElementById('pendingPayments').textContent = `৳ ${pendingPayments.toLocaleString()}`;
+                document.getElementById('totalRevenue').textContent = `৳ ${totalRevenue.toLocaleString()}`;
+                
+                // Show notification
+                showNotification('Client updated successfully!', 'success');
+            } else {
+                // Add new client
+                // Remove empty state row if it exists
+                if (emptyClientRow) {
+                    emptyClientRow.remove();
+                }
+                
+                // Create new table row
+                const newRow = document.createElement('tr');
+                const clientId = 'client_' + clientCounter++;
+                newRow.dataset.id = clientId;
+                
+                // Determine badge class based on package
+                const badgeClass = packageName === 'Monthly' ? 'badge-monthly' : 'badge-project';
+                
+                // Determine status class
+                let statusClass;
+                switch(status) {
+                    case 'active': statusClass = 'status-active'; break;
+                    case 'pending': statusClass = 'status-pending'; break;
+                    case 'completed': statusClass = 'status-completed'; break;
+                    case 'hold': statusClass = 'status-hold'; break;
+                    default: statusClass = 'status-active';
+                }
+                
+                // Status text
+                const statusText = status.charAt(0).toUpperCase() + status.slice(1);
+                
+                // Add data to row
+                newRow.innerHTML = `
+                    <td>${clientName}</td>
+                    <td>
+                        <a href="${projectLink}" class="badge ${badgeClass}">${projectLink.substring(0, 15)}...</a>
+                    </td>
+                    <td>${teamMember}</td>
+                    <td>${packageName}</td>
+                    <td>৳ ${parseInt(budget).toLocaleString()}</td>
+                    <td>৳ ${parseInt(paid).toLocaleString()}</td>
+                    <td>৳ ${due.toLocaleString()}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>${contentDelivered}</td>
+                    <td>
+                        <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                `;
+                
+                // Add row to table
+                clientTableBody.prepend(newRow);
+                
+                // Add event listeners to buttons
+                newRow.querySelector('.edit-btn').addEventListener('click', function() {
+                    editClient(this);
+                });
+                
+                newRow.querySelector('.delete-btn').addEventListener('click', function() {
+                    deleteClient(this);
+                });
+                
+                // Update stats
+                totalClients++;
+                document.getElementById('totalClients').textContent = totalClients;
+                
+                if (status === 'active') {
+                    activeProjects++;
+                    document.getElementById('activeProjects').textContent = activeProjects;
+                }
+                
+                pendingPayments += due;
+                document.getElementById('pendingPayments').textContent = `৳ ${pendingPayments.toLocaleString()}`;
+                
+                totalRevenue += parseInt(paid);
+                document.getElementById('totalRevenue').textContent = `৳ ${totalRevenue.toLocaleString()}`;
+                
+                // Show notification
+                showNotification('Client added successfully!', 'success');
             }
-            
-            pendingPayments += due;
-            document.getElementById('pendingPayments').textContent = `৳ ${pendingPayments.toLocaleString()}`;
-            
-            totalRevenue += parseInt(paid);
-            document.getElementById('totalRevenue').textContent = `৳ ${totalRevenue.toLocaleString()}`;
-            
-            // Show notification
-            showNotification('Client added successfully!', 'success');
             
             // Reset form and hide
             clientFormData.reset();
             clientForm.style.display = 'none';
             contentField.style.display = 'none';
+            editingClientId = null;
         }
 
         // Delete client function
-        window.deleteClient = function(button) {
+        function deleteClient(button) {
             const row = button.closest('tr');
-            row.remove();
+            const paidText = row.cells[5].textContent.trim().replace('৳', '').replace(/,/g, '');
+            const dueText = row.cells[6].textContent.trim().replace('৳', '').replace(/,/g, '');
+            const statusText = row.cells[7].querySelector('.status').textContent.trim();
+            
+            const paid = parseFloat(paidText) || 0;
+            const due = parseFloat(dueText) || 0;
+            
+            // Update stats
             totalClients--;
             document.getElementById('totalClients').textContent = totalClients;
             
+            if (statusText === 'Active') {
+                activeProjects--;
+                document.getElementById('activeProjects').textContent = activeProjects;
+            }
+            
+            pendingPayments -= due;
+            document.getElementById('pendingPayments').textContent = `৳ ${pendingPayments.toLocaleString()}`;
+            
+            totalRevenue -= paid;
+            document.getElementById('totalRevenue').textContent = `৳ ${totalRevenue.toLocaleString()}`;
+            
+            // Remove row
+            row.remove();
+            
+            // Show notification
             showNotification('Client deleted successfully!', 'error');
+            
+            // Show empty state if no clients left
+            if (totalClients === 0) {
+                clientTableBody.innerHTML = `
+                    <tr id="emptyClientRow">
+                        <td colspan="10">
+                            <div class="empty-state">
+                                <i class="fas fa-user-friends"></i>
+                                <h4>No Clients Found</h4>
+                                <p>You haven't added any clients yet. Click the "Add Client" button to get started.</p>
+                                <button class="btn btn-primary" id="addFirstClientBtn">
+                                    <i class="fas fa-plus"></i> Add Your First Client
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                
+                // Reattach event listener
+                document.getElementById('addFirstClientBtn').addEventListener('click', showClientForm);
+            }
         }
 
         // Search functionality
@@ -1626,6 +1600,9 @@
             const rows = clientTableBody.querySelectorAll('tr');
             
             rows.forEach(row => {
+                // Skip empty state row
+                if (row.id === 'emptyClientRow') return;
+                
                 const clientName = row.cells[0].textContent.toLowerCase();
                 if (clientName.includes(searchTerm)) {
                     row.style.display = '';
