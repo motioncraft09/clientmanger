@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>motioncraft | Client Management System</title>
+    <title>ClientSync | Client Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -908,7 +908,6 @@
             </div>
         </div>
 
-        <!-- Other Pages -->
         <!-- Clients Page -->
         <div id="clientsPage" class="page">
             <div class="header">
@@ -926,7 +925,7 @@
                     <div class="card-tools">
                         <div class="search-box">
                             <i class="fas fa-search"></i>
-                            <input type="text" placeholder="Search clients...">
+                            <input type="text" id="clientsSearchInput" placeholder="Search clients...">
                         </div>
                         <button class="action-btn">
                             <i class="fas fa-filter"></i>
@@ -934,7 +933,7 @@
                     </div>
                 </div>
                 <div class="table-container">
-                    <table>
+                    <table id="clientsTable">
                         <thead>
                             <tr>
                                 <th>Client Name</th>
@@ -946,8 +945,8 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
+                        <tbody id="clientsTableBody">
+                            <tr id="emptyClientsRow">
                                 <td colspan="7">
                                     <div class="empty-state">
                                         <i class="fas fa-users"></i>
@@ -977,18 +976,40 @@
             </div>
             
             <div class="content-card">
-                <div class="placeholder-content">
-                    <div class="placeholder-icon">
-                        <i class="fas fa-tasks"></i>
+                <div class="card-header">
+                    <h3>Active Projects</h3>
+                    <div class="card-tools">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="projectsSearchInput" placeholder="Search projects...">
+                        </div>
                     </div>
-                    <h3>Project Dashboard</h3>
-                    <p class="placeholder-text">
-                        This is your project management hub. Track all ongoing projects, their status, assigned teams, 
-                        deadlines, and deliverables. Monitor progress and ensure timely completion of all projects.
-                    </p>
-                    <button class="btn btn-primary" style="margin-top: 20px;">
-                        <i class="fas fa-rocket"></i> Create New Project
-                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="projectsTable">
+                        <thead>
+                            <tr>
+                                <th>Project</th>
+                                <th>Client</th>
+                                <th>Team</th>
+                                <th>Budget</th>
+                                <th>Status</th>
+                                <th>Progress</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projectsTableBody">
+                            <tr id="emptyProjectsRow">
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <i class="fas fa-tasks"></i>
+                                        <h4>No Active Projects</h4>
+                                        <p>You don't have any active projects yet. Add a client project to get started.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -1005,18 +1026,40 @@
             </div>
             
             <div class="content-card">
-                <div class="placeholder-content">
-                    <div class="placeholder-icon">
-                        <i class="fas fa-money-bill-wave"></i>
+                <div class="card-header">
+                    <h3>Recent Payments</h3>
+                    <div class="card-tools">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="paymentsSearchInput" placeholder="Search payments...">
+                        </div>
                     </div>
-                    <h3>Payment Tracking</h3>
-                    <p class="placeholder-text">
-                        Manage all client payments in one place. Track received payments, pending dues, 
-                        and generate invoices. Get a clear overview of your financial transactions and revenue.
-                    </p>
-                    <button class="btn btn-success" style="margin-top: 20px;">
-                        <i class="fas fa-file-invoice"></i> Generate Reports
-                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="paymentsTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Client</th>
+                                <th>Project</th>
+                                <th>Amount (BDT)</th>
+                                <th>Method</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentsTableBody">
+                            <tr id="emptyPaymentsRow">
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        <h4>No Payments Recorded</h4>
+                                        <p>You haven't recorded any payments yet. Add a client payment to get started.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -1038,7 +1081,7 @@
                         <i class="fas fa-chart-line"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>৳ 0</h3>
+                        <h3 id="reportsTotalRevenue">৳ 0</h3>
                         <p>Total Revenue</p>
                     </div>
                 </div>
@@ -1047,7 +1090,7 @@
                         <i class="fas fa-chart-pie"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>0</h3>
+                        <h3 id="reportsCompletedProjects">0</h3>
                         <p>Completed Projects</p>
                     </div>
                 </div>
@@ -1056,7 +1099,7 @@
                         <i class="fas fa-user-clock"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>0</h3>
+                        <h3 id="reportsActiveClients">0</h3>
                         <p>Active Clients</p>
                     </div>
                 </div>
@@ -1065,7 +1108,7 @@
                         <i class="fas fa-money-bill-wave"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>৳ 0</h3>
+                        <h3 id="reportsPendingPayments">৳ 0</h3>
                         <p>Pending Payments</p>
                     </div>
                 </div>
@@ -1091,7 +1134,7 @@
                 
                 <div class="chart-card">
                     <div class="chart-header">
-                        <h3>Project Status</h3>
+                        <h3>Project Status Distribution</h3>
                     </div>
                     <div class="chart">
                         <div class="chart-placeholder">
@@ -1213,7 +1256,8 @@
         let pendingPayments = 0;
         let totalRevenue = 0;
         let editingClientId = null;
-        let clientCounter = 1; // Counter for generating client IDs
+        let clientCounter = 1;
+        let clients = [];
 
         // DOM Elements
         const clientForm = document.getElementById('clientForm');
@@ -1241,9 +1285,60 @@
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
+            // Load data from localStorage
+            loadDataFromStorage();
+            
             // Set up all button event listeners
             setupEventListeners();
+            
+            // Render all pages with current data
+            renderAllPages();
         });
+
+        // Load data from localStorage
+        function loadDataFromStorage() {
+            const savedData = localStorage.getItem('clientManagementData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                clients = data.clients || [];
+                totalClients = data.totalClients || 0;
+                activeProjects = data.activeProjects || 0;
+                pendingPayments = data.pendingPayments || 0;
+                totalRevenue = data.totalRevenue || 0;
+                clientCounter = data.clientCounter || 1;
+                
+                // Update stats display
+                document.getElementById('totalClients').textContent = totalClients;
+                document.getElementById('activeProjects').textContent = activeProjects;
+                document.getElementById('pendingPayments').textContent = `৳ ${pendingPayments.toLocaleString()}`;
+                document.getElementById('totalRevenue').textContent = `৳ ${totalRevenue.toLocaleString()}`;
+                
+                // Render dashboard table
+                renderClientTable();
+            }
+        }
+
+        // Save data to localStorage
+        function saveDataToStorage() {
+            const data = {
+                clients,
+                totalClients,
+                activeProjects,
+                pendingPayments,
+                totalRevenue,
+                clientCounter
+            };
+            localStorage.setItem('clientManagementData', JSON.stringify(data));
+        }
+
+        // Render all pages with current data
+        function renderAllPages() {
+            renderClientTable();
+            renderClientsPage();
+            renderProjectsPage();
+            renderPaymentsPage();
+            renderReportsPage();
+        }
 
         // Set up all button event listeners
         function setupEventListeners() {
@@ -1281,6 +1376,9 @@
             
             // Search functionality
             searchInput.addEventListener('input', searchClients);
+            document.getElementById('clientsSearchInput').addEventListener('input', searchClientsPage);
+            document.getElementById('projectsSearchInput').addEventListener('input', searchProjects);
+            document.getElementById('paymentsSearchInput').addEventListener('input', searchPayments);
         }
 
         // Navigation functions
@@ -1294,6 +1392,11 @@
             // Show the selected page
             pages.forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
+            
+            // Render the page if it's reports page
+            if (pageId === 'reportsPage') {
+                renderReportsPage();
+            }
         }
 
         // Client form functions
@@ -1336,29 +1439,23 @@
             const clientId = row.dataset.id;
             editingClientId = clientId;
             
-            // Extract data from the row
-            const clientName = row.cells[0].textContent;
-            const projectLink = row.cells[1].querySelector('a').href;
-            const teamMember = row.cells[2].textContent;
-            const packageName = row.cells[3].textContent;
-            const budget = parseFloat(row.cells[4].textContent.replace('৳', '').replace(/,/g, ''));
-            const paid = parseFloat(row.cells[5].textContent.replace('৳', '').replace(/,/g, ''));
-            const status = row.cells[7].querySelector('.status').textContent.toLowerCase();
-            const contentDelivered = row.cells[8].textContent;
+            // Find client data
+            const client = clients.find(c => c.id === clientId);
+            if (!client) return;
             
             // Populate the form
-            document.getElementById('clientName').value = clientName;
-            document.getElementById('projectLink').value = projectLink;
-            document.getElementById('teamMember').value = teamMember;
-            document.getElementById('package').value = packageName;
-            document.getElementById('budget').value = budget;
-            document.getElementById('paid').value = paid;
-            document.getElementById('status').value = status;
+            document.getElementById('clientName').value = client.name;
+            document.getElementById('projectLink').value = client.projectLink;
+            document.getElementById('teamMember').value = client.team;
+            document.getElementById('package').value = client.package;
+            document.getElementById('budget').value = client.budget;
+            document.getElementById('paid').value = client.paid;
+            document.getElementById('status').value = client.status;
             
             // Show content field if monthly package
-            if (packageName === 'Monthly') {
+            if (client.package === 'Monthly') {
                 document.getElementById('contentField').style.display = 'block';
-                document.getElementById('contentDelivered').value = contentDelivered;
+                document.getElementById('contentDelivered').value = client.contentDelivered;
             } else {
                 document.getElementById('contentField').style.display = 'none';
             }
@@ -1378,78 +1475,50 @@
             const projectLink = document.getElementById('projectLink').value;
             const teamMember = document.getElementById('teamMember').value;
             const packageName = document.getElementById('package').value;
-            const budget = document.getElementById('budget').value;
-            const paid = document.getElementById('paid').value;
+            const budget = parseFloat(document.getElementById('budget').value) || 0;
+            const paid = parseFloat(document.getElementById('paid').value) || 0;
             const status = document.getElementById('status').value;
             const contentDelivered = document.getElementById('contentDelivered').value || '-';
             
             // Calculate due amount
-            const due = parseInt(budget) - parseInt(paid);
+            const due = budget - paid;
             
             if (editingClientId) {
                 // Update existing client
-                const row = document.querySelector(`tr[data-id="${editingClientId}"]`);
+                const clientIndex = clients.findIndex(c => c.id === editingClientId);
+                if (clientIndex === -1) return;
                 
-                // Get old values for stats adjustment
-                const oldPaid = parseFloat(row.cells[5].textContent.replace('৳', '').replace(/,/g, ''));
-                const oldDue = parseFloat(row.cells[6].textContent.replace('৳', '').replace(/,/g, ''));
-                const oldStatus = row.cells[7].querySelector('.status').textContent.toLowerCase();
+                const oldClient = clients[clientIndex];
                 
-                // Determine badge class based on package
-                const badgeClass = packageName === 'Monthly' ? 'badge-monthly' : 'badge-project';
+                // Create updated client object
+                const updatedClient = {
+                    ...oldClient,
+                    name: clientName,
+                    projectLink: projectLink,
+                    team: teamMember,
+                    package: packageName,
+                    budget: budget,
+                    paid: paid,
+                    due: due,
+                    status: status,
+                    contentDelivered: packageName === 'Monthly' ? contentDelivered : '-'
+                };
                 
-                // Determine status class
-                let statusClass;
-                switch(status) {
-                    case 'active': statusClass = 'status-active'; break;
-                    case 'pending': statusClass = 'status-pending'; break;
-                    case 'completed': statusClass = 'status-completed'; break;
-                    case 'hold': statusClass = 'status-hold'; break;
-                    default: statusClass = 'status-active';
-                }
-                
-                // Status text
-                const statusText = status.charAt(0).toUpperCase() + status.slice(1);
-                
-                // Update the row
-                row.innerHTML = `
-                    <td>${clientName}</td>
-                    <td>
-                        <a href="${projectLink}" class="badge ${badgeClass}">${projectLink.substring(0, 15)}...</a>
-                    </td>
-                    <td>${teamMember}</td>
-                    <td>${packageName}</td>
-                    <td>৳ ${parseInt(budget).toLocaleString()}</td>
-                    <td>৳ ${parseInt(paid).toLocaleString()}</td>
-                    <td>৳ ${due.toLocaleString()}</td>
-                    <td><span class="status ${statusClass}">${statusText}</span></td>
-                    <td>${contentDelivered}</td>
-                    <td>
-                        <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                        <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-                    </td>
-                `;
-                
-                // Reattach event listeners
-                row.querySelector('.edit-btn').addEventListener('click', function() {
-                    editClient(this);
-                });
-                
-                row.querySelector('.delete-btn').addEventListener('click', function() {
-                    deleteClient(this);
-                });
+                // Update clients array
+                clients[clientIndex] = updatedClient;
                 
                 // Update stats
-                totalRevenue = totalRevenue - oldPaid + parseInt(paid);
-                pendingPayments = pendingPayments - oldDue + due;
+                totalRevenue = totalRevenue - oldClient.paid + paid;
+                pendingPayments = pendingPayments - oldClient.due + due;
                 
                 // Update active projects if status changed
-                if (oldStatus === 'active' && status !== 'active') {
+                if (oldClient.status === 'active' && status !== 'active') {
                     activeProjects--;
-                } else if (oldStatus !== 'active' && status === 'active') {
+                } else if (oldClient.status !== 'active' && status === 'active') {
                     activeProjects++;
                 }
                 
+                // Update stats display
                 document.getElementById('activeProjects').textContent = activeProjects;
                 document.getElementById('pendingPayments').textContent = `৳ ${pendingPayments.toLocaleString()}`;
                 document.getElementById('totalRevenue').textContent = `৳ ${totalRevenue.toLocaleString()}`;
@@ -1458,81 +1527,43 @@
                 showNotification('Client updated successfully!', 'success');
             } else {
                 // Add new client
-                // Remove empty state row if it exists
-                if (emptyClientRow) {
-                    emptyClientRow.remove();
-                }
-                
-                // Create new table row
-                const newRow = document.createElement('tr');
                 const clientId = 'client_' + clientCounter++;
-                newRow.dataset.id = clientId;
+                const newClient = {
+                    id: clientId,
+                    name: clientName,
+                    projectLink: projectLink,
+                    team: teamMember,
+                    package: packageName,
+                    budget: budget,
+                    paid: paid,
+                    due: due,
+                    status: status,
+                    contentDelivered: packageName === 'Monthly' ? contentDelivered : '-',
+                    dateAdded: new Date().toISOString()
+                };
                 
-                // Determine badge class based on package
-                const badgeClass = packageName === 'Monthly' ? 'badge-monthly' : 'badge-project';
-                
-                // Determine status class
-                let statusClass;
-                switch(status) {
-                    case 'active': statusClass = 'status-active'; break;
-                    case 'pending': statusClass = 'status-pending'; break;
-                    case 'completed': statusClass = 'status-completed'; break;
-                    case 'hold': statusClass = 'status-hold'; break;
-                    default: statusClass = 'status-active';
-                }
-                
-                // Status text
-                const statusText = status.charAt(0).toUpperCase() + status.slice(1);
-                
-                // Add data to row
-                newRow.innerHTML = `
-                    <td>${clientName}</td>
-                    <td>
-                        <a href="${projectLink}" class="badge ${badgeClass}">${projectLink.substring(0, 15)}...</a>
-                    </td>
-                    <td>${teamMember}</td>
-                    <td>${packageName}</td>
-                    <td>৳ ${parseInt(budget).toLocaleString()}</td>
-                    <td>৳ ${parseInt(paid).toLocaleString()}</td>
-                    <td>৳ ${due.toLocaleString()}</td>
-                    <td><span class="status ${statusClass}">${statusText}</span></td>
-                    <td>${contentDelivered}</td>
-                    <td>
-                        <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                        <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-                    </td>
-                `;
-                
-                // Add row to table
-                clientTableBody.prepend(newRow);
-                
-                // Add event listeners to buttons
-                newRow.querySelector('.edit-btn').addEventListener('click', function() {
-                    editClient(this);
-                });
-                
-                newRow.querySelector('.delete-btn').addEventListener('click', function() {
-                    deleteClient(this);
-                });
+                // Add to clients array
+                clients.unshift(newClient);
                 
                 // Update stats
                 totalClients++;
-                document.getElementById('totalClients').textContent = totalClients;
-                
-                if (status === 'active') {
-                    activeProjects++;
-                    document.getElementById('activeProjects').textContent = activeProjects;
-                }
-                
+                if (status === 'active') activeProjects++;
                 pendingPayments += due;
-                document.getElementById('pendingPayments').textContent = `৳ ${pendingPayments.toLocaleString()}`;
+                totalRevenue += paid;
                 
-                totalRevenue += parseInt(paid);
+                // Update stats display
+                document.getElementById('totalClients').textContent = totalClients;
+                document.getElementById('activeProjects').textContent = activeProjects;
+                document.getElementById('pendingPayments').textContent = `৳ ${pendingPayments.toLocaleString()}`;
                 document.getElementById('totalRevenue').textContent = `৳ ${totalRevenue.toLocaleString()}`;
                 
                 // Show notification
                 showNotification('Client added successfully!', 'success');
             }
+            
+            // Save data and re-render all pages
+            saveDataToStorage();
+            renderAllPages();
             
             // Reset form and hide
             clientFormData.reset();
@@ -1544,36 +1575,40 @@
         // Delete client function
         function deleteClient(button) {
             const row = button.closest('tr');
-            const paidText = row.cells[5].textContent.trim().replace('৳', '').replace(/,/g, '');
-            const dueText = row.cells[6].textContent.trim().replace('৳', '').replace(/,/g, '');
-            const statusText = row.cells[7].querySelector('.status').textContent.trim();
+            const clientId = row.dataset.id;
             
-            const paid = parseFloat(paidText) || 0;
-            const due = parseFloat(dueText) || 0;
+            // Find client
+            const clientIndex = clients.findIndex(c => c.id === clientId);
+            if (clientIndex === -1) return;
+            
+            const client = clients[clientIndex];
             
             // Update stats
             totalClients--;
+            if (client.status === 'active') activeProjects--;
+            pendingPayments -= client.due;
+            totalRevenue -= client.paid;
+            
+            // Update stats display
             document.getElementById('totalClients').textContent = totalClients;
-            
-            if (statusText === 'Active') {
-                activeProjects--;
-                document.getElementById('activeProjects').textContent = activeProjects;
-            }
-            
-            pendingPayments -= due;
+            document.getElementById('activeProjects').textContent = activeProjects;
             document.getElementById('pendingPayments').textContent = `৳ ${pendingPayments.toLocaleString()}`;
-            
-            totalRevenue -= paid;
             document.getElementById('totalRevenue').textContent = `৳ ${totalRevenue.toLocaleString()}`;
             
-            // Remove row
-            row.remove();
+            // Remove client from array
+            clients.splice(clientIndex, 1);
+            
+            // Save data and re-render
+            saveDataToStorage();
+            renderAllPages();
             
             // Show notification
             showNotification('Client deleted successfully!', 'error');
-            
-            // Show empty state if no clients left
-            if (totalClients === 0) {
+        }
+
+        // Render client table on dashboard
+        function renderClientTable() {
+            if (clients.length === 0) {
                 clientTableBody.innerHTML = `
                     <tr id="emptyClientRow">
                         <td colspan="10">
@@ -1591,7 +1626,243 @@
                 
                 // Reattach event listener
                 document.getElementById('addFirstClientBtn').addEventListener('click', showClientForm);
+                return;
             }
+            
+            // Clear existing rows
+            clientTableBody.innerHTML = '';
+            
+            // Add each client as a row
+            clients.forEach(client => {
+                // Determine badge class based on package
+                const badgeClass = client.package === 'Monthly' ? 'badge-monthly' : 'badge-project';
+                
+                // Determine status class
+                let statusClass;
+                switch(client.status) {
+                    case 'active': statusClass = 'status-active'; break;
+                    case 'pending': statusClass = 'status-pending'; break;
+                    case 'completed': statusClass = 'status-completed'; break;
+                    case 'hold': statusClass = 'status-hold'; break;
+                    default: statusClass = 'status-active';
+                }
+                
+                // Status text
+                const statusText = client.status.charAt(0).toUpperCase() + client.status.slice(1);
+                
+                // Create row
+                const row = document.createElement('tr');
+                row.dataset.id = client.id;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>
+                        <a href="${client.projectLink}" class="badge ${badgeClass}">${client.projectLink.substring(0, 15)}...</a>
+                    </td>
+                    <td>${client.team}</td>
+                    <td>${client.package}</td>
+                    <td>৳ ${client.budget.toLocaleString()}</td>
+                    <td>৳ ${client.paid.toLocaleString()}</td>
+                    <td>৳ ${client.due.toLocaleString()}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>${client.contentDelivered}</td>
+                    <td>
+                        <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                `;
+                
+                // Add event listeners
+                row.querySelector('.edit-btn').addEventListener('click', function() {
+                    editClient(this);
+                });
+                
+                row.querySelector('.delete-btn').addEventListener('click', function() {
+                    deleteClient(this);
+                });
+                
+                clientTableBody.appendChild(row);
+            });
+        }
+
+        // Render clients page
+        function renderClientsPage() {
+            const clientsTableBody = document.getElementById('clientsTableBody');
+            
+            if (clients.length === 0) {
+                clientsTableBody.innerHTML = `
+                    <tr id="emptyClientsRow">
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <i class="fas fa-users"></i>
+                                <h4>No Clients Found</h4>
+                                <p>You haven't added any clients yet. Click the "New Client" button to get started.</p>
+                                <button class="btn btn-primary" id="addClientFromClientsBtn">
+                                    <i class="fas fa-plus"></i> Add Your First Client
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                
+                // Reattach event listener
+                document.getElementById('addClientFromClientsBtn').addEventListener('click', showClientForm);
+                return;
+            }
+            
+            // Clear existing rows
+            clientsTableBody.innerHTML = '';
+            
+            // Add each client as a row
+            clients.forEach(client => {
+                // Determine status class
+                let statusClass;
+                switch(client.status) {
+                    case 'active': statusClass = 'status-active'; break;
+                    case 'pending': statusClass = 'status-pending'; break;
+                    case 'completed': statusClass = 'status-completed'; break;
+                    case 'hold': statusClass = 'status-hold'; break;
+                    default: statusClass = 'status-active';
+                }
+                
+                // Status text
+                const statusText = client.status.charAt(0).toUpperCase() + client.status.slice(1);
+                
+                // Create row
+                const row = document.createElement('tr');
+                row.dataset.id = client.id;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.projectLink.substring(0, 30)}...</td>
+                    <td>${client.team}</td>
+                    <td>${client.package}</td>
+                    <td>৳ ${client.budget.toLocaleString()}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                `;
+                
+                // Add event listeners
+                row.querySelector('.edit-btn').addEventListener('click', function() {
+                    editClient(this);
+                });
+                
+                row.querySelector('.delete-btn').addEventListener('click', function() {
+                    deleteClient(this);
+                });
+                
+                clientsTableBody.appendChild(row);
+            });
+        }
+
+        // Render projects page
+        function renderProjectsPage() {
+            const projectsTableBody = document.getElementById('projectsTableBody');
+            
+            // Filter active projects
+            const activeProjects = clients.filter(client => client.status === 'active');
+            
+            if (activeProjects.length === 0) {
+                projectsTableBody.innerHTML = `
+                    <tr id="emptyProjectsRow">
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <i class="fas fa-tasks"></i>
+                                <h4>No Active Projects</h4>
+                                <p>You don't have any active projects yet. Add a client project to get started.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Clear existing rows
+            projectsTableBody.innerHTML = '';
+            
+            // Add each active project as a row
+            activeProjects.forEach(client => {
+                // Determine progress
+                let progress = "Not Started";
+                if (client.contentDelivered !== '-') {
+                    const [delivered, total] = client.contentDelivered.split('/').map(Number);
+                    progress = `${Math.round((delivered / total) * 100)}%`;
+                }
+                
+                // Create row
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.projectLink.substring(0, 20)}...</td>
+                    <td>${client.name}</td>
+                    <td>${client.team}</td>
+                    <td>৳ ${client.budget.toLocaleString()}</td>
+                    <td><span class="status status-active">Active</span></td>
+                    <td>${progress}</td>
+                `;
+                
+                projectsTableBody.appendChild(row);
+            });
+        }
+
+        // Render payments page
+        function renderPaymentsPage() {
+            const paymentsTableBody = document.getElementById('paymentsTableBody');
+            
+            // Get all payments (each client has one payment record for simplicity)
+            const payments = clients.map(client => ({
+                date: new Date(client.dateAdded).toLocaleDateString(),
+                client: client.name,
+                project: client.projectLink.substring(0, 20) + '...',
+                amount: client.paid,
+                method: "Bank Transfer", // Default for simplicity
+                status: client.paid >= client.budget ? "Completed" : "Partial"
+            }));
+            
+            if (payments.length === 0) {
+                paymentsTableBody.innerHTML = `
+                    <tr id="emptyPaymentsRow">
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <h4>No Payments Recorded</h4>
+                                <p>You haven't recorded any payments yet. Add a client payment to get started.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Clear existing rows
+            paymentsTableBody.innerHTML = '';
+            
+            // Add each payment as a row
+            payments.forEach(payment => {
+                // Create row
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${payment.date}</td>
+                    <td>${payment.client}</td>
+                    <td>${payment.project}</td>
+                    <td>৳ ${payment.amount.toLocaleString()}</td>
+                    <td>${payment.method}</td>
+                    <td><span class="status ${payment.status === 'Completed' ? 'status-completed' : 'status-pending'}">${payment.status}</span></td>
+                `;
+                
+                paymentsTableBody.appendChild(row);
+            });
+        }
+
+        // Render reports page
+        function renderReportsPage() {
+            // Update report stats
+            document.getElementById('reportsTotalRevenue').textContent = `৳ ${totalRevenue.toLocaleString()}`;
+            document.getElementById('reportsCompletedProjects').textContent = 
+                clients.filter(c => c.status === 'completed').length;
+            document.getElementById('reportsActiveClients').textContent = 
+                clients.filter(c => c.status === 'active').length;
+            document.getElementById('reportsPendingPayments').textContent = `৳ ${pendingPayments.toLocaleString()}`;
         }
 
         // Search functionality
@@ -1604,6 +1875,57 @@
                 if (row.id === 'emptyClientRow') return;
                 
                 const clientName = row.cells[0].textContent.toLowerCase();
+                if (clientName.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function searchClientsPage() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#clientsTableBody tr');
+            
+            rows.forEach(row => {
+                // Skip empty state row
+                if (row.id === 'emptyClientsRow') return;
+                
+                const clientName = row.cells[0].textContent.toLowerCase();
+                if (clientName.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function searchProjects() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#projectsTableBody tr');
+            
+            rows.forEach(row => {
+                // Skip empty state row
+                if (row.id === 'emptyProjectsRow') return;
+                
+                const projectName = row.cells[0].textContent.toLowerCase();
+                if (projectName.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function searchPayments() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#paymentsTableBody tr');
+            
+            rows.forEach(row => {
+                // Skip empty state row
+                if (row.id === 'emptyPaymentsRow') return;
+                
+                const clientName = row.cells[1].textContent.toLowerCase();
                 if (clientName.includes(searchTerm)) {
                     row.style.display = '';
                 } else {
